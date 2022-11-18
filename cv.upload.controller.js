@@ -86,7 +86,7 @@ console.log(response.data.choices[0].text);
 
 
 
-port = 3000;
+port = 3000
 app.listen(port, () => {
   console.log(`app listen on http://localhost:${port}`);
 });
