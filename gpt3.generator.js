@@ -1,12 +1,14 @@
 require('dotenv').config();
-const { Configuration, OpenAIApi } = require("openai");
-const { getpdfTotext } = require("./pdf.to.string")
+const {
+    Configuration,
+    OpenAIApi
+} = require("openai");
+const {
+    getpdfTotext
+} = require("./pdf.to.string")
 
 
-const generator = async (file, company_name, company_address,
-                        city, country, role, years_of_exp,
-                        date, recipient_name, recipient_department,
-                        recipient_email, recipient_phone_no) => {
+const generator = async (file, company_name, role, recipient_name, recipient_department) => {
     const result = await getpdfTotext(file);
 
     const configuration = new Configuration({
@@ -14,13 +16,13 @@ const generator = async (file, company_name, company_address,
     });
     const openai = new OpenAIApi(configuration);
 
-
-// create the prompt with the function parameters
+    const gpt3Prompt = `Use this resume ${result}, to generate a cover letter for the role of ${role} at ${company_name}. Address it to ${recipient_name} in the ${recipient_department}of the organization `
+    // create the prompt with the function parameters
     const response = await openai.createCompletion({
         model: "text-davinci-002",
-        prompt: `Generate a cover letter for a backend web developer at Google, the resume is as follows: ${result}`,
+        prompt: gpt3Prompt,
         temperature: 0.5,
-        max_tokens: 424,
+        max_tokens: 2040,
         top_p: 1,
         frequency_penalty: 0,
         presence_penalty: 0,
@@ -28,4 +30,6 @@ const generator = async (file, company_name, company_address,
     const coverLetter = response.data.choices[0].text
     return coverLetter;
 }
-module.exports = { generator }
+module.exports = {
+    generator
+}
