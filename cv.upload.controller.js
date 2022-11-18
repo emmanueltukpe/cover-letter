@@ -2,6 +2,9 @@ const express = require("express");
 const fileUpload = require("express-fileupload");
 const path = require("path");
 const pdf = require("pdf-parse");
+require('dotenv').config();
+// const cloudinary = require("cloudinary").v2;
+const { Configuration, OpenAIApi } = require("openai");
 
 // initializing the express app
 const app = express();
@@ -32,7 +35,7 @@ app.post("/upload", async (req, res) => {
   if (extension != "pdf") {
     res.send("you cannot upload this file type");
   }
- 
+
   const getpdfTotext = async () => {
     let parsedPdfFile;
     let pdfbuffer = file;
@@ -44,9 +47,44 @@ app.post("/upload", async (req, res) => {
     }
   };
   const result = await getpdfTotext();
-  console.log(result.split(" ").length);
+//   console.log(result);
   res.status(200);
+
+  const configuration = new Configuration({
+    apiKey: process.env.OPENAI_API_KEY,
+  });
+  const openai = new OpenAIApi(configuration);
+
+  const response = await openai.createCompletion({
+    model: "text-davinci-002",
+    prompt: `Generate a cover letter for a backend web developer at Google, the resume is as follows: ${result}`,
+    temperature: 0.7,
+    max_tokens: 424,
+    top_p: 1,
+    frequency_penalty: 0,
+    presence_penalty: 0,
+  });
+
+console.log(response.data.choices[0].text);
+
+
+
+
+//   cloudinary.uploader
+//     .upload(result, {
+//       resource_type: "auto",
+//     })
+//     .then((result) => {
+//       // console.log("success", JSON.stringify(result, null, 2));
+//       console.log(JSON.stringify(result.url));
+//     })
+//     .catch((error) => {
+//       console.log("error", JSON.stringify(error, null, 2));
+//     });
+
 });
+
+
 
 port = 3000;
 app.listen(port, () => {
