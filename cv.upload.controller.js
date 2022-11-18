@@ -15,20 +15,3 @@ const cvUpload = async (req, res) => {
 };
 
 module.exports = { cvUpload }
-
-//console.log(response.data.choices[0].text);
-
-
-
-
-//   cloudinary.uploader
-//     .upload(result, {
-//       resource_type: "auto",
-//     })
-//     .then((result) => {
-//       // console.log("success", JSON.stringify(result, null, 2));
-//       console.log(JSON.stringify(result.url));
-//     })
-//     .catch((error) => {
-//       console.log("error", JSON.stringify(error, null, 2));
-//     });
