@@ -58,7 +58,7 @@ app.post("/upload", async (req, res) => {
   const response = await openai.createCompletion({
     model: "text-davinci-002",
     prompt: `Generate a cover letter for a backend web developer at Google, the resume is as follows: ${result}`,
-    temperature: 0.7,
+    temperature: 0.5,
     max_tokens: 424,
     top_p: 1,
     frequency_penalty: 0,
