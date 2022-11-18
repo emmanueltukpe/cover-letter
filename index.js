@@ -1,16 +1,25 @@
 const express = require("express");
+const path = require("path");
 const app = express();
+const fileUpload = require("express-fileupload");
 
 
 
-app.get("/", (req, res) => {
-	res.send("templates api");
+app.use(
+  fileUpload({
+    limits: {
+      fileSize: 5 * 1024 * 1024, //5MB
+    },
+    abortOnLimit: true,
+  })
+  );
+  
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, "index.html"));
 });
 
-
-
-
-const port = 3000
+  
+  const port = 3000
 const start = async () => {
     try {
       //connect DB
