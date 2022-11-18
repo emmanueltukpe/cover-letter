@@ -11,7 +11,7 @@ const cvUpload = async (req, res) => {
     if (extension != "pdf") {
         res.send("you cannot upload this file type");
     }
-    res.status(200);
+    res.status(200).send('success');
 };
 
 module.exports = { cvUpload }
